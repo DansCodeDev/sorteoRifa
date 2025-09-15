@@ -65,7 +65,11 @@
     }
 
     @media (max-width: 600px) {
-      .inicio-img { max-width: 300px; }
+        .inicio-img {
+    width: 90%;      /* ocupa 90% del ancho de la pantalla */
+    max-width: none; /* elimina el límite fijo */
+    height: auto;    /* mantiene proporción */
+  }
       .btn-ingresar { padding: 12px 25px; font-size: 1rem; }
     }
   </style>
