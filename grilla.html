@@ -6,7 +6,7 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f4f4f4;
+      background: linear-gradient(135deg, #6fa8dc, #f4f4f4);
       text-align: center;
       padding: 20px;
     }
@@ -15,7 +15,7 @@
     }
     .grid {
       display: grid;
-      grid-template-columns: repeat(25, 1fr); /* 🔹 siempre 25 por fila */
+      grid-template-columns: repeat(20, 1fr); /* 🔹 siempre 25 por fila */
       grid-gap: 3px;
       max-width: 1000px;
       margin: auto;
@@ -32,7 +32,7 @@
       text-decoration: none; /* 🔹 quita subrayado de link */
     }
     .available {
-      background-color: blue;
+      background-color: rgb(76, 76, 255);
     }
     .sold {
       background-color: red;
@@ -78,7 +78,7 @@
 
   <script>
     const totalNumbers = 4000; // del 0000 al 3999
-    const pageSize = 1000;     // números por página
+    const pageSize = 300;     // números por página
     let currentPage = 0;
 
     // 📌 Lista de números vendidos (modificá acá cada día)
