@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Grilla de Números</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      text-align: center;
+      padding: 20px;
+    }
+    h1 {
+      margin-bottom: 10px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(25, 1fr); /* 🔹 siempre 25 por fila */
+      grid-gap: 3px;
+      max-width: 1000px;
+      margin: auto;
+    }
+    .number {
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      color: white;
+      font-size: 12px;
+      font-weight: bold;
+      text-decoration: none; /* 🔹 quita subrayado de link */
+    }
+    .available {
+      background-color: blue;
+    }
+    .sold {
+      background-color: red;
+      pointer-events: none; /* 🔹 desactiva click */
+    }
+    .pagination {
+      margin: 10px auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 5px;
+      max-width: 1000px;
+    }
+    button {
+      padding: 5px 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      background: #333;
+      color: white;
+      font-size: 13px;
+    }
+    button.active {
+      background: #007bff;
+    }
+    button:disabled {
+      background: #888;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+<body>
+  <h1>Grilla de Números (0000 - 3999)</h1>
+
+  <!-- Paginación arriba -->
+  <div id="pagination-top" class="pagination"></div>
+
+  <!-- Grilla -->
+  <div id="grid" class="grid"></div>
+
+  <!-- Paginación abajo -->
+  <div id="pagination-bottom" class="pagination"></div>
+
+  <script>
+    const totalNumbers = 4000; // del 0000 al 3999
+    const pageSize = 1000;     // números por página
+    let currentPage = 0;
+
+    // 📌 Lista de números vendidos (modificá acá cada día)
+    const vendidos = [5, 123, 2500, 3999]; 
+
+    // 📌 Tu número de WhatsApp (formato internacional, sin + ni espacios)
+    const whatsappNumber = "5493865646372"; 
+
+    const grid = document.getElementById("grid");
+    const paginationTop = document.getElementById("pagination-top");
+    const paginationBottom = document.getElementById("pagination-bottom");
+
+    function formatNumber(n) {
+      return n.toString().padStart(4, "0"); // convierte a 4 dígitos
+    }
+
+    function renderGrid(page) {
+      grid.innerHTML = "";
+      const start = page * pageSize;
+      const end = Math.min(start + pageSize, totalNumbers);
+
+      for (let i = start; i < end; i++) {
+        const number = formatNumber(i);
+        const isSold = vendidos.includes(i);
+
+        if (isSold) {
+          // 🔴 Vendido → div sin link
+          const div = document.createElement("div");
+          div.className = "number sold";
+          div.textContent = number;
+          grid.appendChild(div);
+        } else {
+          // 🔵 Disponible → link a WhatsApp
+          const a = document.createElement("a");
+          a.className = "number available";
+          a.textContent = number;
+          const message = `Hola, me gustaría comprar el nro: ${number}, mi nombre es: ..., y este es mi nro:`;
+          a.href = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+          a.target = "_blank";
+          grid.appendChild(a);
+        }
+      }
+    }
+
+    function renderPagination(container) {
+      container.innerHTML = "";
+      const totalPages = Math.ceil(totalNumbers / pageSize);
+
+      // Botón Anterior
+      const prevBtn = document.createElement("button");
+      prevBtn.textContent = "← Anterior";
+      prevBtn.disabled = currentPage === 0;
+      prevBtn.onclick = () => {
+        if (currentPage > 0) {
+          currentPage--;
+          renderAll();
+        }
+      };
+      container.appendChild(prevBtn);
+
+      // Botones de rango
+      for (let i = 0; i < totalPages; i++) {
+        const btn = document.createElement("button");
+        btn.textContent = `${formatNumber(i * pageSize)} - ${formatNumber(Math.min((i + 1) * pageSize - 1, totalNumbers - 1))}`;
+        if (i === currentPage) btn.classList.add("active");
+        btn.onclick = () => {
+          currentPage = i;
+          renderAll();
+        };
+        container.appendChild(btn);
+      }
+
+      // Botón Siguiente
+      const nextBtn = document.createElement("button");
+      nextBtn.textContent = "Siguiente →";
+      nextBtn.disabled = currentPage === totalPages - 1;
+      nextBtn.onclick = () => {
+        if (currentPage < totalPages - 1) {
+          currentPage++;
+          renderAll();
+        }
+      };
+      container.appendChild(nextBtn);
+    }
+
+    function renderAll() {
+      renderGrid(currentPage);
+      renderPagination(paginationTop);
+      renderPagination(paginationBottom);
+    }
+
+    // Inicializar
+    renderAll();
+  </script>
+</body>
+</html>
