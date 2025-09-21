@@ -2,20 +2,24 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Grilla de Números</title>
+  <title>GRILLA DE NÚMEROS</title>
   <style>
     body {
+      
+      height: 800px;
       font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #6fa8dc, #f4f4f4);
+      background: linear-gradient(135deg, #95b9bc, #f4f4f4);
       text-align: center;
-      padding: 20px;
+      padding: 10px;
     }
     h1 {
-      margin-bottom: 10px;
+      margin-bottom: 30px;
+      color: #4a696c;
+      font-size: 50px;
     }
     .grid {
       display: grid;
-      grid-template-columns: repeat(20, 1fr); /* 🔹 siempre 25 por fila */
+      grid-template-columns: repeat(15, 1fr); 
       grid-gap: 3px;
       max-width: 1000px;
       margin: auto;
@@ -26,37 +30,38 @@
       align-items: center;
       justify-content: center;
       border-radius: 4px;
-      color: white;
+      color: black;
       font-size: 12px;
       font-weight: bold;
-      text-decoration: none; /* 🔹 quita subrayado de link */
+      text-decoration: none;
     }
     .available {
-      background-color: rgb(76, 76, 255);
+      background-color: rgb(255, 255, 255);
     }
     .sold {
       background-color: red;
-      pointer-events: none; /* 🔹 desactiva click */
+      pointer-events: none;
     }
     .pagination {
       margin: 10px auto;
+      margin-bottom: 30px;
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       gap: 5px;
-      max-width: 1000px;
+      max-width: 1200px;
     }
     button {
       padding: 5px 10px;
       border: none;
       border-radius: 4px;
       cursor: pointer;
-      background: #333;
-      color: white;
+      background: white;
+      color: #333;
       font-size: 13px;
     }
     button.active {
-      background: #007bff;
+      background: #95b9bc;
     }
     button:disabled {
       background: #888;
@@ -65,7 +70,7 @@
   </style>
 </head>
 <body>
-  <h1>Grilla de Números (0000 - 3999)</h1>
+  <h1>GRILLA DE NÚMEROS</h1>
 
   <!-- Paginación arriba -->
   <div id="pagination-top" class="pagination"></div>
@@ -73,16 +78,14 @@
   <!-- Grilla -->
   <div id="grid" class="grid"></div>
 
-  <!-- Paginación abajo -->
-  <div id="pagination-bottom" class="pagination"></div>
-
+  
   <script>
-    const totalNumbers = 4000; // del 0000 al 3999
-    const pageSize = 300;     // números por página
+    const totalNumbers = 2000; // del 0000 al 3999
+    const pageSize = 200;     // números por página
     let currentPage = 0;
 
     // 📌 Lista de números vendidos (modificá acá cada día)
-    const vendidos = [5, 123, 2500, 3999]; 
+    const vendidos = [5, 123, 250]; 
 
     // 📌 Tu número de WhatsApp (formato internacional, sin + ni espacios)
     const whatsappNumber = "5493865646372"; 
