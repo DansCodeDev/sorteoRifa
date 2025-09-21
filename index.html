@@ -2,92 +2,112 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GRILLA DE NÚMEROS</title>
   <style>
     body {
-      
-      height: 800px;
+      min-height: 100vh;
       font-family: Arial, sans-serif;
       background: linear-gradient(135deg, #95b9bc, #f4f4f4);
       text-align: center;
       padding: 10px;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
     }
+
     h1 {
-      margin-bottom: 30px;
+      margin: 20px 0;
       color: #4a696c;
-      font-size: 50px;
+      font-size: clamp(26px, 5vw, 42px);
     }
+
     .grid {
       display: grid;
-      grid-template-columns: repeat(15, 1fr); 
-      grid-gap: 3px;
-      max-width: 1000px;
+      grid-template-columns: repeat(auto-fill, minmax(45px, 1fr)); /* un poco más chicas */
+      gap: 5px;
+      width: 100%;
+      max-width: 1100px;
       margin: auto;
     }
+
     .number {
-      height: 28px;
+      aspect-ratio: 1;
       display: flex;
       align-items: center;
       justify-content: center;
-      border-radius: 4px;
-      color: black;
-      font-size: 12px;
+      border-radius: 6px;
+      font-size: clamp(12px, 3.5vw, 18px); /* más chico que antes */
       font-weight: bold;
       text-decoration: none;
+      transition: transform 0.2s, background 0.2s;
     }
+
     .available {
-      background-color: rgb(255, 255, 255);
+      background-color: #fff;
+      color: #000;
     }
+
+    .available:hover {
+      background-color: #cfe4e6;
+      transform: scale(1.05);
+    }
+
     .sold {
       background-color: red;
+      color: white;
       pointer-events: none;
     }
+
     .pagination {
-      margin: 10px auto;
-      margin-bottom: 30px;
+      margin: 20px auto;
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 5px;
-      max-width: 1200px;
+      gap: 8px;
+      max-width: 100%;
     }
+
     button {
-      padding: 5px 10px;
+      padding: 6px 12px;
       border: none;
-      border-radius: 4px;
+      border-radius: 6px;
       cursor: pointer;
       background: white;
       color: #333;
-      font-size: 13px;
+      font-size: clamp(11px, 2.8vw, 15px);
+      transition: background 0.2s;
     }
+
+    button:hover:not(:disabled) {
+      background: #d2e4e5;
+    }
+
     button.active {
       background: #95b9bc;
+      color: white;
     }
+
     button:disabled {
-      background: #888;
+      background: #aaa;
       cursor: not-allowed;
+      color: #fff;
     }
   </style>
 </head>
 <body>
   <h1>GRILLA DE NÚMEROS</h1>
 
-  <!-- Paginación arriba -->
   <div id="pagination-top" class="pagination"></div>
-
-  <!-- Grilla -->
   <div id="grid" class="grid"></div>
+  <div id="pagination-bottom" class="pagination"></div>
 
-  
   <script>
-    const totalNumbers = 2000; // del 0000 al 3999
-    const pageSize = 200;     // números por página
+    const totalNumbers = 2000;
+    const pageSize = 200;     
     let currentPage = 0;
 
-    // 📌 Lista de números vendidos (modificá acá cada día)
     const vendidos = [5, 123, 250]; 
-
-    // 📌 Tu número de WhatsApp (formato internacional, sin + ni espacios)
     const whatsappNumber = "5493865646372"; 
 
     const grid = document.getElementById("grid");
@@ -95,7 +115,7 @@
     const paginationBottom = document.getElementById("pagination-bottom");
 
     function formatNumber(n) {
-      return n.toString().padStart(4, "0"); // convierte a 4 dígitos
+      return n.toString().padStart(4, "0");
     }
 
     function renderGrid(page) {
@@ -108,13 +128,11 @@
         const isSold = vendidos.includes(i);
 
         if (isSold) {
-          // 🔴 Vendido → div sin link
           const div = document.createElement("div");
           div.className = "number sold";
           div.textContent = number;
           grid.appendChild(div);
         } else {
-          // 🔵 Disponible → link a WhatsApp
           const a = document.createElement("a");
           a.className = "number available";
           a.textContent = number;
@@ -130,7 +148,6 @@
       container.innerHTML = "";
       const totalPages = Math.ceil(totalNumbers / pageSize);
 
-      // Botón Anterior
       const prevBtn = document.createElement("button");
       prevBtn.textContent = "← Anterior";
       prevBtn.disabled = currentPage === 0;
@@ -138,11 +155,11 @@
         if (currentPage > 0) {
           currentPage--;
           renderAll();
+          window.scrollTo({ top: 0, behavior: "smooth" });
         }
       };
       container.appendChild(prevBtn);
 
-      // Botones de rango
       for (let i = 0; i < totalPages; i++) {
         const btn = document.createElement("button");
         btn.textContent = `${formatNumber(i * pageSize)} - ${formatNumber(Math.min((i + 1) * pageSize - 1, totalNumbers - 1))}`;
@@ -150,11 +167,11 @@
         btn.onclick = () => {
           currentPage = i;
           renderAll();
+          window.scrollTo({ top: 0, behavior: "smooth" });
         };
         container.appendChild(btn);
       }
 
-      // Botón Siguiente
       const nextBtn = document.createElement("button");
       nextBtn.textContent = "Siguiente →";
       nextBtn.disabled = currentPage === totalPages - 1;
@@ -162,6 +179,7 @@
         if (currentPage < totalPages - 1) {
           currentPage++;
           renderAll();
+          window.scrollTo({ top: 0, behavior: "smooth" });
         }
       };
       container.appendChild(nextBtn);
@@ -173,7 +191,6 @@
       renderPagination(paginationBottom);
     }
 
-    // Inicializar
     renderAll();
   </script>
 </body>
